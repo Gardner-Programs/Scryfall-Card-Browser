@@ -1,0 +1,88 @@
+#:kivy 2.1.0
+
+<ErrorPopup>:
+    title: "Error With Search"
+    auto_dismiss: False
+    size_hint: .5, .5
+    BoxLayout:
+        orientation: "vertical"
+        Label:
+            text:root.error_text
+            text_size:self.width, root.height
+            halign:"center"
+            valign:"center"
+
+        Button:
+            text:"Close"
+            on_press:root.dismiss()
+            size_hint:(.5,None)
+            height:50
+            pos_hint:{'center_x': .5}
+
+<MainWindow>:
+    search_bar:search_bar
+    search_button:search_button
+    results_grid:results_grid
+    spinnder_id:spinnder_id
+    page_options:page_options
+    GridLayout:
+        cols:1
+        padding:10
+        size:root.width,root.height
+        GridLayout:
+            cols:4
+            size_hint:(1,None)
+            height:40
+            padding:[0,0,0,10]
+            TextInput:
+                id:search_bar
+                hint_text:"Enter Search"
+                multiline:False
+                on_text_validate:root.search()
+            Button:
+                id:search_button
+                text:"Search"
+                size_hint_x:None
+                width:70
+                on_press:root.search()
+            Button:
+                id:search_button
+                text:"Random"
+                size_hint_x:None
+                width:70
+                on_press:root.random_search()
+            Spinner:
+                id:spinnder_id
+                size_hint_x:None
+                width:70
+                text:"Size"
+                values:["Small","Medium","Large","Ex-Large"]
+                on_text:root.size_click(spinnder_id.text)
+                
+        ScrollView:
+            size:self.size
+            do_scroll_x:False
+            bar_width:9
+            bar_inactive_color:(1,1,1,1)
+            effect_cls: "ScrollEffect"
+            scroll_type: ['bars']
+            GridLayout:
+                id:results_grid
+                size_hint_y:None
+                height:self.minimum_height
+                cols:(root.width//root.col_width)
+        ScrollView:
+            size:self.size
+            do_scroll_y:False
+            bar_width:9
+            size_hint:(1,None)
+            height:40
+            bar_inactive_color:(1,1,1,1)
+            effect_cls: "ScrollEffect"
+            scroll_type: ['bars']
+            GridLayout:
+                id:page_options
+                size_hint:(None,None)
+                size:(self.minimum_width,20)
+                spacing:5
+                padding:[0,8,8,0]
