@@ -1,7 +1,5 @@
 from __future__ import annotations
 
-import math
-
 import requests
 from kivy.app import App
 from kivy.core.window import Window
@@ -13,6 +11,8 @@ from kivy.uix.popup import Popup
 from kivy.uix.widget import Widget
 
 import asynckivy as ak
+
+from card_logic import api_pages_for, page_offset, max_page_count, card_image_source
 
 
 class ImageButton(ButtonBehavior, AsyncImage):
@@ -53,10 +53,7 @@ class MainWindow(Widget):
         img_name = self.SIZE_REFERENCE[self.card_size]["name"]
         for card in selected_page:
             await ak.sleep(0.05)
-            try:
-                source = card["image_uris"][img_name]
-            except KeyError:
-                source = card["card_faces"][0]["image_uris"][img_name]
+            source = card_image_source(card, img_name)
             results_grid.add_widget(
                 ImageButton(
                     source=source,
@@ -85,19 +82,14 @@ class MainWindow(Widget):
     # ── Pagination ───────────────────────────────────────────────
 
     def _get_api_pages(self) -> range:
-        """Return the Scryfall API page numbers needed to fill the current app page.
-
-        Scryfall returns 175 cards per API page; the app shows page_size per view.
-        """
-        first = ((self.page - 1) * self.page_size) // 175 + 1
-        last = ((self.page * self.page_size) - 1) // 175 + 1
-        return range(first, last + 1)
+        """Return the Scryfall API page numbers needed to fill the current app page."""
+        return api_pages_for(self.page, self.page_size)
 
     def create_page_select(self, num_results: int) -> None:
         """Build numbered page buttons below the results grid."""
         page_options = self.ids.page_options
         page_options.clear_widgets()
-        max_page = math.ceil(num_results / self.page_size)
+        max_page = max_page_count(num_results, self.page_size)
         page_options.cols = max_page
         for page in range(1, max_page + 1):
             btn = Button(text=str(page), size_hint=(None, None), size=(30, 20))
@@ -119,7 +111,7 @@ class MainWindow(Widget):
                 return
             card_list.extend(response.json()["data"])
         first_api_page = min(api_pages)
-        offset = ((self.page - 1) * self.page_size) - ((first_api_page - 1) * 175)
+        offset = page_offset(self.page, self.page_size, first_api_page)
         ak.start(self.display_results(card_list[offset : offset + self.page_size]))
 
     # ── Search ───────────────────────────────────────────────────
@@ -158,10 +150,7 @@ class MainWindow(Widget):
         card = response.json()
         img_name = self.SIZE_REFERENCE[self.card_size]["name"]
         size = self.SIZE_REFERENCE[self.card_size]["size"]
-        try:
-            source = card["image_uris"][img_name]
-        except KeyError:
-            source = card["card_faces"][0]["image_uris"][img_name]
+        source = card_image_source(card, img_name)
 
         results_grid = self.ids.results_grid
         results_grid.clear_widgets()
