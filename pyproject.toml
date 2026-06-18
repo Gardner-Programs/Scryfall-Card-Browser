@@ -1,0 +1,5 @@
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+# Flat modules at the repo root.
+pythonpath = ["."]
+addopts = "-ra"
