@@ -11,8 +11,7 @@ from kivy.uix.popup import Popup
 from kivy.uix.widget import Widget
 
 import asynckivy as ak
-
-from card_logic import api_pages_for, page_offset, max_page_count, card_image_source
+from card_logic import api_pages_for, card_image_source, max_page_count, page_offset
 
 
 class ImageButton(ButtonBehavior, AsyncImage):

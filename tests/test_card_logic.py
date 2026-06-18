@@ -6,8 +6,7 @@ mapping the app's 50-per-page views onto Scryfall's 175-per-API-page feed.
 
 import pytest
 
-from card_logic import api_pages_for, page_offset, max_page_count, card_image_source
-
+from card_logic import api_pages_for, card_image_source, max_page_count, page_offset
 
 # --------------------------------------------------------------------------
 # api_pages_for: which Scryfall API pages cover a given app page.

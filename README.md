@@ -1,5 +1,7 @@
 # Scryfall Card Browser
 
+[![tests](https://github.com/Gardner-Programs/Scryfall-Card-Browser/actions/workflows/tests.yml/badge.svg)](https://github.com/Gardner-Programs/Scryfall-Card-Browser/actions/workflows/tests.yml)
+
 A desktop app for searching and browsing Magic: The Gathering cards using the [Scryfall API](https://scryfall.com/docs/api), built with Kivy.
 
 ## Features

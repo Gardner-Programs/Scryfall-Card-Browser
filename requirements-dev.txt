@@ -1,3 +1,4 @@
 # Test dependencies. The suite covers card_logic.py (pure stdlib), so it only
 # needs pytest — not Kivy or requests.
 pytest>=8.0
+ruff>=0.6
