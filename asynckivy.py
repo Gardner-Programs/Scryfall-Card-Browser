@@ -1,9 +1,10 @@
-_all__ = ('start', 'sleep', 'event', )
-
 import types
-from functools import partial
 from collections import namedtuple
+from functools import partial
+
 from kivy.clock import Clock
+
+__all__ = ('start', 'sleep', 'event')
 
 CallbackParameter = namedtuple('CallbackParameter', ('args', 'kwargs', ))
 
